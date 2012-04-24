@@ -12,6 +12,7 @@ import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import javax.swing.JComponent;
+import java.math.*;
 
 public class Mandelbrot extends JComponent
 {
@@ -187,5 +188,25 @@ public class Mandelbrot extends JComponent
    public boolean getAutoUpdateIterations()
    {
        return autoUpdateIterations;
+   }
+   
+   public BufferedImage renderImage(int x, int y)
+   {
+       int imgSideSize = Math.min(x, y);
+       BufferedImage image = new BufferedImage(x, y, BufferedImage.TYPE_INT_RGB);
+       Graphics2D g2 = image.createGraphics();
+       for(int i = 0; i < x; i++)
+       {
+           for(int j = 0; j < y; j++)
+           {
+                double x0 = ((double)(i*FOVx)/imgSideSize)+FOVLow.getX();
+                double y0 = ((double)(j*FOVy)/imgSideSize)+FOVLow.getY();
+                int it = calcIt(new Point2D.Double(x0,y0));
+                g2.setColor(mapToColor(it));
+                g2.fillRect(i,j,1,1);
+           }
+       }
+       g2.dispose();
+       return image;
    }
 }
