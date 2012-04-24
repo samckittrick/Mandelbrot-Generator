@@ -12,7 +12,7 @@ import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import javax.swing.JComponent;
-import java.math.*;
+import javax.swing.ProgressMonitor;
 
 public class Mandelbrot extends JComponent
 {
@@ -82,6 +82,7 @@ public class Mandelbrot extends JComponent
    public void updateImage()
    {
       Graphics2D g2 = image.createGraphics();
+      ProgressMonitor pm = new ProgressMonitor(this, "Generating Figure...", "", 0, sideSize*sideSize);
       for(int i = 0; i < sideSize; i++)
       {
          for(int j = 0; j < sideSize; j++)
@@ -90,8 +91,10 @@ public class Mandelbrot extends JComponent
             int iterations = calcIt(p);
             g2.setColor(mapToColor(iterations));
             g2.fillRect(i,j, 1, 1);
+            pm.setProgress((i)*j + j);
          }
       }
+      pm.close();
       g2.dispose();
       repaint();
    }
@@ -193,14 +196,29 @@ public class Mandelbrot extends JComponent
    public BufferedImage renderImage(int x, int y)
    {
        int imgSideSize = Math.min(x, y);
+       double tFOVx, tFOVy;
+       Point2D.Double tFOVLow;
+       if(imgSideSize == x)
+       {
+           tFOVx = FOVx;
+           tFOVy = FOVy * ((double)y/sideSize);
+           tFOVLow = new Point2D.Double(FOVLow.getX(), FOVLow.getY()-(tFOVy - FOVy)/2);
+       }
+       else
+       {
+           tFOVx = FOVx * ((double)x/imgSideSize);
+           System.out.println(tFOVx);
+           tFOVLow = new Point2D.Double(FOVLow.getX() - (tFOVx - FOVx)/2, FOVLow.getY());
+           tFOVy = FOVy;
+       }
        BufferedImage image = new BufferedImage(x, y, BufferedImage.TYPE_INT_RGB);
        Graphics2D g2 = image.createGraphics();
        for(int i = 0; i < x; i++)
        {
            for(int j = 0; j < y; j++)
            {
-                double x0 = ((double)(i*FOVx)/imgSideSize)+FOVLow.getX();
-                double y0 = ((double)(j*FOVy)/imgSideSize)+FOVLow.getY();
+                double x0 = ((double)(i*tFOVx)/x) + tFOVLow.getX();
+                double y0 = ((double)(j*tFOVy)/y)+ tFOVLow.getY();
                 int it = calcIt(new Point2D.Double(x0,y0));
                 g2.setColor(mapToColor(it));
                 g2.fillRect(i,j,1,1);
