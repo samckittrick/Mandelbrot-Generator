@@ -24,12 +24,12 @@
                 <Property name="text" type="java.lang.String" value="Load ColorMap"/>
               </Properties>
             </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem3">
+            <MenuItem class="javax.swing.JMenuItem" name="exportMenuItem">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Export Image"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem3ActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="exportMenuItemActionPerformed"/>
               </Events>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="QuitMenu">
@@ -111,7 +111,7 @@
         <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="mandelbrot1MouseClicked"/>
       </Events>
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_CreateCodePost" type="java.lang.String" value="mandelbrot1.setColors(c);&#xd;&#xa;mandelbrot1.setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));"/>
+        <AuxValue name="JavaCodeGenerator_CreateCodePost" type="java.lang.String" value="mandelbrot1.setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));"/>
       </AuxValues>
 
       <Layout>

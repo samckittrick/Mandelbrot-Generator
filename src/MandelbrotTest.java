@@ -10,18 +10,20 @@
 import java.awt.event.*;
 import javax.swing.JOptionPane;
 import java.awt.Cursor;
+import java.awt.Dimension;
+import java.io.*;
+import java.awt.image.BufferedImage;
+import javax.imageio.*;
 
 public class MandelbrotTest extends javax.swing.JFrame {
-    //Remove After
-    ColorMap c;
+    ImageSaveDialog saveDialog;
     
     
     /**
      * Creates new form MandelbrotTest
      */
     public MandelbrotTest() {
-        //Remove After
-        c = new ColorMap();
+        saveDialog = new ImageSaveDialog(this, true);
         
         initComponents();
     }
@@ -37,7 +39,6 @@ public class MandelbrotTest extends javax.swing.JFrame {
 
         ZoomButtonGroup = new javax.swing.ButtonGroup();
         mandelbrot1 = new Mandelbrot();
-        mandelbrot1.setColors(c);
         mandelbrot1.setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -53,7 +54,7 @@ public class MandelbrotTest extends javax.swing.JFrame {
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
-        jMenuItem3 = new javax.swing.JMenuItem();
+        exportMenuItem = new javax.swing.JMenuItem();
         QuitMenu = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         jMenuItem5 = new javax.swing.JMenuItem();
@@ -188,13 +189,13 @@ public class MandelbrotTest extends javax.swing.JFrame {
         jMenuItem2.setText("Load ColorMap");
         jMenu1.add(jMenuItem2);
 
-        jMenuItem3.setText("Export Image");
-        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+        exportMenuItem.setText("Export Image");
+        exportMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem3ActionPerformed(evt);
+                exportMenuItemActionPerformed(evt);
             }
         });
-        jMenu1.add(jMenuItem3);
+        jMenu1.add(exportMenuItem);
 
         QuitMenu.setText("Quit");
         QuitMenu.addActionListener(new java.awt.event.ActionListener() {
@@ -278,9 +279,29 @@ public class MandelbrotTest extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
-    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jMenuItem3ActionPerformed
+    private void exportMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportMenuItemActionPerformed
+        saveDialog.setVisible(true);
+        if(saveDialog.getReturnStatus() == ImageSaveDialog.RET_OK)
+        {
+            Dimension size;
+            File location;
+            try
+            {
+                size = saveDialog.getImageSize();
+                location = new File(saveDialog.getFilePath());
+                BufferedImage img = mandelbrot1.renderImage(size.width, size.height);
+                ImageIO.write(img, "jpg", location);
+            }
+            catch(NumberFormatException ne)
+            {
+                JOptionPane.showMessageDialog(this, "Size values must be integers.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+            catch(IOException ie)
+            {
+                JOptionPane.showMessageDialog(this, "Error writing image.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_exportMenuItemActionPerformed
 
     private void QuitMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_QuitMenuActionPerformed
         int result = JOptionPane.showConfirmDialog(this, "Are you sure you want to quit?", "Quit?", JOptionPane.YES_NO_OPTION);
@@ -337,6 +358,7 @@ public class MandelbrotTest extends javax.swing.JFrame {
     private javax.swing.JMenuItem QuitMenu;
     private javax.swing.ButtonGroup ZoomButtonGroup;
     private ColorMap colorMap1;
+    private javax.swing.JMenuItem exportMenuItem;
     private javax.swing.JTextField iterations;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
@@ -347,7 +369,6 @@ public class MandelbrotTest extends javax.swing.JFrame {
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
-    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JPanel jPanel1;
