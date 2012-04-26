@@ -1,3 +1,11 @@
+/****************************************************
+//    Mandelbrot Generator
+//    Scott McKittrick
+//    http://www.scottmckittrick.com
+//
+//    Written as a JComponent for the Swing Library
+//**************************************************/
+
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -14,6 +22,7 @@ import java.awt.Dimension;
 import java.io.*;
 import java.awt.image.BufferedImage;
 import javax.imageio.*;
+import javax.swing.*;
 
 public class MandelbrotTest extends javax.swing.JFrame {
     ImageSaveDialog saveDialog;
@@ -26,6 +35,8 @@ public class MandelbrotTest extends javax.swing.JFrame {
         saveDialog = new ImageSaveDialog(this, true);
         
         initComponents();
+        mandelbrot1.setColors(colorMap1);
+        mandelbrot1.updateImage();
     }
 
     /**
@@ -48,12 +59,12 @@ public class MandelbrotTest extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         zoomInButton = new javax.swing.JToggleButton();
         zoomOutButton = new javax.swing.JToggleButton();
-        colorMap1 = new ColorMap();
         resetButton = new javax.swing.JButton();
+        colorMap1 = new ColorMap();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
-        jMenuItem2 = new javax.swing.JMenuItem();
+        saveColorMapMenu = new javax.swing.JMenuItem();
+        LoadColorMapMenu = new javax.swing.JMenuItem();
         exportMenuItem = new javax.swing.JMenuItem();
         QuitMenu = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
@@ -88,7 +99,7 @@ public class MandelbrotTest extends javax.swing.JFrame {
         jLabel1.setToolTipText("");
 
         jLabel2.setText("Iterations: ");
-        jLabel2.setToolTipText("Maximum nu,ber of Iterations to draw the fractal.");
+        jLabel2.setToolTipText("Maximum number of Iterations to draw the fractal.");
 
         iterations.setColumns(5);
         iterations.setText(Integer.toString(mandelbrot1.getIterations()));
@@ -110,19 +121,6 @@ public class MandelbrotTest extends javax.swing.JFrame {
         ZoomButtonGroup.add(zoomOutButton);
         zoomOutButton.setText("Zoom Out");
 
-        colorMap1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-
-        javax.swing.GroupLayout colorMap1Layout = new javax.swing.GroupLayout(colorMap1);
-        colorMap1.setLayout(colorMap1Layout);
-        colorMap1Layout.setHorizontalGroup(
-            colorMap1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
-        );
-        colorMap1Layout.setVerticalGroup(
-            colorMap1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 50, Short.MAX_VALUE)
-        );
-
         resetButton.setText("Reset");
         resetButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -137,22 +135,27 @@ public class MandelbrotTest extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(iterations, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel2)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(iterations, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jButton1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(zoomInButton)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(zoomOutButton)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(resetButton)))
+                        .addContainerGap(61, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jButton1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(zoomInButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(zoomOutButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(resetButton))
-                    .addComponent(jLabel3)
-                    .addComponent(colorMap1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(16, Short.MAX_VALUE))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3)
+                            .addComponent(colorMap1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -165,9 +168,9 @@ public class MandelbrotTest extends javax.swing.JFrame {
                     .addComponent(iterations, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(5, 5, 5)
                 .addComponent(colorMap1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(25, 25, 25)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
                     .addComponent(zoomInButton)
@@ -178,16 +181,21 @@ public class MandelbrotTest extends javax.swing.JFrame {
 
         jMenu1.setText("File");
 
-        jMenuItem1.setText("Save ColorMap");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+        saveColorMapMenu.setText("Save ColorMap");
+        saveColorMapMenu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
+                saveColorMapMenuActionPerformed(evt);
             }
         });
-        jMenu1.add(jMenuItem1);
+        jMenu1.add(saveColorMapMenu);
 
-        jMenuItem2.setText("Load ColorMap");
-        jMenu1.add(jMenuItem2);
+        LoadColorMapMenu.setText("Load ColorMap");
+        LoadColorMapMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                LoadColorMapMenuActionPerformed(evt);
+            }
+        });
+        jMenu1.add(LoadColorMapMenu);
 
         exportMenuItem.setText("Export Image");
         exportMenuItem.addActionListener(new java.awt.event.ActionListener() {
@@ -274,10 +282,49 @@ public class MandelbrotTest extends javax.swing.JFrame {
         mandelbrot1.setDefaultZoom();
         mandelbrot1.updateImage();
     }//GEN-LAST:event_resetButtonActionPerformed
+    
+    private class MapFileFilter extends javax.swing.filechooser.FileFilter {
+        public boolean accept(File f)
+        {
+            if(f.isDirectory())
+                return true;
 
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
+            if(f.getName().endsWith(".cmp"))
+                return true;
+
+            return false;
+        }
+
+        public String getDescription()
+        {
+            return "Color Map (.cmp)";
+        }
+    }
+    
+    private void saveColorMapMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveColorMapMenuActionPerformed
+        FileOutputStream fos = null;
+        ObjectOutputStream oos = null;
+        JFileChooser jfc = new JFileChooser();
+        jfc.addChoosableFileFilter(new MapFileFilter());
+        int result = jfc.showSaveDialog(this);
+        if(result == JFileChooser.APPROVE_OPTION)
+        {
+            try
+            {
+                fos = new FileOutputStream(jfc.getSelectedFile());
+                oos = new ObjectOutputStream(fos);
+                oos.writeObject(colorMap1);
+                oos.close();
+            }
+            catch(IOException e)
+            {
+                JOptionPane.showMessageDialog(this, "Error saving color map", "Error", JOptionPane.ERROR_MESSAGE);
+                System.out.println(e.getMessage());
+            }
+        }
+        
+        
+    }//GEN-LAST:event_saveColorMapMenuActionPerformed
 
     private void exportMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportMenuItemActionPerformed
         saveDialog.setVisible(true);
@@ -312,6 +359,36 @@ public class MandelbrotTest extends javax.swing.JFrame {
     private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
         JOptionPane.showMessageDialog(this, "<html><b>Mandelbrot Generator v1.0</b><br />By: Scott McKittrick<br /><a href=\"http://www.scottmckittrick.com\">http://www.scottmckittrick.com</a></html>", "About Mandelbrot Generator", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_jMenuItem6ActionPerformed
+
+    private void LoadColorMapMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LoadColorMapMenuActionPerformed
+        FileInputStream fis = null;
+        ObjectInputStream ois = null;
+        JFileChooser jfc = new JFileChooser();
+        jfc.addChoosableFileFilter(new MapFileFilter());
+        int result = jfc.showOpenDialog(this);
+        if(result == JFileChooser.APPROVE_OPTION)
+        {
+            try
+            {
+                fis = new FileInputStream(jfc.getSelectedFile());
+                ois = new ObjectInputStream(fis);
+                ColorMap newColorMap = (ColorMap)ois.readObject();
+                ois.close();
+                colorMap1.importColors(newColorMap);
+                mandelbrot1.updateImage();
+            }
+            catch(IOException e)
+            {
+                System.out.println("Error Loading: " + e.getMessage());
+                JOptionPane.showMessageDialog(this, "Error loading color map.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+            catch(ClassNotFoundException e)
+            {
+                System.out.println("Class not found: " + e.getMessage());
+                JOptionPane.showMessageDialog(this, "Error loading color map.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_LoadColorMapMenuActionPerformed
 
     /**
      * @param args the command line arguments
@@ -355,6 +432,7 @@ public class MandelbrotTest extends javax.swing.JFrame {
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem LoadColorMapMenu;
     private javax.swing.JMenuItem QuitMenu;
     private javax.swing.ButtonGroup ZoomButtonGroup;
     private ColorMap colorMap1;
@@ -367,13 +445,12 @@ public class MandelbrotTest extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JPanel jPanel1;
     private Mandelbrot mandelbrot1;
     private javax.swing.JButton resetButton;
+    private javax.swing.JMenuItem saveColorMapMenu;
     private javax.swing.JToggleButton zoomInButton;
     private javax.swing.JToggleButton zoomOutButton;
     // End of variables declaration//GEN-END:variables

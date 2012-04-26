@@ -1,3 +1,11 @@
+/****************************************************
+//    Mandelbrot Generator
+//    Scott McKittrick
+//    http://www.scottmckittrick.com
+//
+//    Written as a JComponent for the Swing Library
+//**************************************************/
+
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -11,7 +19,7 @@ import javax.swing.*;
 
 /**
  *
- * @author Scott
+ * @author Scott McKittrick
  */
 public class ImageSaveDialog extends javax.swing.JDialog {
 

@@ -1,6 +1,7 @@
 /****************************************************
 //    Mandelbrot Generator
 //    Scott McKittrick
+//    http://www.scottmckittrick.com
 //
 //    Written as a JComponent for the Swing Library
 //**************************************************/
@@ -14,7 +15,7 @@ import java.awt.image.BufferedImage;
 import javax.swing.JComponent;
 import javax.swing.ProgressMonitor;
 
-public class Mandelbrot extends JComponent
+public class Mandelbrot extends JComponent// implements Runnable
 {
    private int sideSize;
    private int maxIterations;
@@ -42,7 +43,7 @@ public class Mandelbrot extends JComponent
       g2.dispose();
       autoUpdateIterations = true;
 
-      updateImage();
+      //updateImage();
    }
    
    private Point2D.Double normalise(int Px, int Py)
@@ -82,7 +83,7 @@ public class Mandelbrot extends JComponent
    public void updateImage()
    {
       Graphics2D g2 = image.createGraphics();
-      ProgressMonitor pm = new ProgressMonitor(this, "Generating Figure...", "", 0, sideSize*sideSize);
+      //ProgressMonitor pm = new ProgressMonitor(this, "Generating Figure...", "", 0, sideSize*sideSize);
       for(int i = 0; i < sideSize; i++)
       {
          for(int j = 0; j < sideSize; j++)
@@ -91,10 +92,10 @@ public class Mandelbrot extends JComponent
             int iterations = calcIt(p);
             g2.setColor(mapToColor(iterations));
             g2.fillRect(i,j, 1, 1);
-            pm.setProgress((i)*j + j);
+            //pm.setProgress((i)*j + j);
          }
       }
-      pm.close();
+      //pm.close();
       g2.dispose();
       repaint();
    }
@@ -227,4 +228,9 @@ public class Mandelbrot extends JComponent
        g2.dispose();
        return image;
    }
+   
+   /*public void run()
+   {
+       
+   }*/
 }

@@ -1,3 +1,11 @@
+/****************************************************
+//    Mandelbrot Generator
+//    Scott McKittrick
+//    http://www.scottmckittrick.com
+//
+//    Written as a JComponent for the Swing Library
+//**************************************************/
+
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -5,7 +13,7 @@
 
 /**
  *
- * @author Scott
+ * @author Scott McKittrick
  */
 import java.io.File;
 import javax.swing.filechooser.FileFilter;
