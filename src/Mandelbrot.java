@@ -160,6 +160,8 @@ public class Mandelbrot extends JComponent// implements Runnable
        double LprimeX = zoomPoint.getX() - (FOVx/2);
        double LprimeY = zoomPoint.getY() - (FOVy/2);
        FOVLow = new Point2D.Double(LprimeX, LprimeY);
+       
+       //maxIterations *= 1.25;
    }
    
    public void zoomOut(int Px, int Py)

@@ -23,9 +23,11 @@ import java.io.*;
 import java.awt.image.BufferedImage;
 import javax.imageio.*;
 import javax.swing.*;
+import java.net.*;
 
 public class MandelbrotTest extends javax.swing.JFrame {
     ImageSaveDialog saveDialog;
+    DocumentationDialog docDialog;
     
     
     /**
@@ -33,6 +35,8 @@ public class MandelbrotTest extends javax.swing.JFrame {
      */
     public MandelbrotTest() {
         saveDialog = new ImageSaveDialog(this, true);
+        docDialog = new DocumentationDialog(this, true);
+        
         
         initComponents();
         mandelbrot1.setColors(colorMap1);
@@ -68,8 +72,8 @@ public class MandelbrotTest extends javax.swing.JFrame {
         exportMenuItem = new javax.swing.JMenuItem();
         QuitMenu = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
-        jMenuItem5 = new javax.swing.JMenuItem();
-        jMenuItem6 = new javax.swing.JMenuItem();
+        docMenu = new javax.swing.JMenuItem();
+        AboutMenu = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Mandelbrot Generator");
@@ -217,16 +221,21 @@ public class MandelbrotTest extends javax.swing.JFrame {
 
         jMenu2.setText("Help");
 
-        jMenuItem5.setText("Documentation");
-        jMenu2.add(jMenuItem5);
-
-        jMenuItem6.setText("About");
-        jMenuItem6.addActionListener(new java.awt.event.ActionListener() {
+        docMenu.setText("Documentation");
+        docMenu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem6ActionPerformed(evt);
+                docMenuActionPerformed(evt);
             }
         });
-        jMenu2.add(jMenuItem6);
+        jMenu2.add(docMenu);
+
+        AboutMenu.setText("About");
+        AboutMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AboutMenuActionPerformed(evt);
+            }
+        });
+        jMenu2.add(AboutMenu);
 
         jMenuBar1.add(jMenu2);
 
@@ -269,13 +278,13 @@ public class MandelbrotTest extends javax.swing.JFrame {
         if(zoomInButton.isSelected())
         {
             mandelbrot1.zoomIn(evt.getX(), evt.getY());
-            mandelbrot1.updateImage();
         }
         else
         {
             mandelbrot1.zoomOut(evt.getX(), evt.getY());
-            mandelbrot1.updateImage();
         }
+        mandelbrot1.updateImage();
+        iterations.setText(Integer.toString(mandelbrot1.getIterations()));
     }//GEN-LAST:event_mandelbrot1MouseClicked
 
     private void resetButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetButtonActionPerformed
@@ -356,9 +365,10 @@ public class MandelbrotTest extends javax.swing.JFrame {
             System.exit(0);
     }//GEN-LAST:event_QuitMenuActionPerformed
 
-    private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
-        JOptionPane.showMessageDialog(this, "<html><b>Mandelbrot Generator v1.0</b><br />By: Scott McKittrick<br /><a href=\"http://www.scottmckittrick.com\">http://www.scottmckittrick.com</a></html>", "About Mandelbrot Generator", JOptionPane.INFORMATION_MESSAGE);
-    }//GEN-LAST:event_jMenuItem6ActionPerformed
+    private void AboutMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AboutMenuActionPerformed
+        URL url = this.getClass().getResource("/icon.jpg");
+        JOptionPane.showMessageDialog(this, "<html><b>Mandelbrot Generator v1.0</b><br />By: Scott McKittrick<br /><a href=\"http://www.scottmckittrick.com\">http://www.scottmckittrick.com</a></html>", "About Mandelbrot Generator", JOptionPane.INFORMATION_MESSAGE, new ImageIcon(url));
+    }//GEN-LAST:event_AboutMenuActionPerformed
 
     private void LoadColorMapMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LoadColorMapMenuActionPerformed
         FileInputStream fis = null;
@@ -389,6 +399,10 @@ public class MandelbrotTest extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_LoadColorMapMenuActionPerformed
+
+    private void docMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_docMenuActionPerformed
+        docDialog.setVisible(true);
+    }//GEN-LAST:event_docMenuActionPerformed
 
     /**
      * @param args the command line arguments
@@ -432,10 +446,12 @@ public class MandelbrotTest extends javax.swing.JFrame {
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem AboutMenu;
     private javax.swing.JMenuItem LoadColorMapMenu;
     private javax.swing.JMenuItem QuitMenu;
     private javax.swing.ButtonGroup ZoomButtonGroup;
     private ColorMap colorMap1;
+    private javax.swing.JMenuItem docMenu;
     private javax.swing.JMenuItem exportMenuItem;
     private javax.swing.JTextField iterations;
     private javax.swing.JButton jButton1;
@@ -445,8 +461,6 @@ public class MandelbrotTest extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem5;
-    private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JPanel jPanel1;
     private Mandelbrot mandelbrot1;
     private javax.swing.JButton resetButton;
